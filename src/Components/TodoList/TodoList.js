@@ -1,4 +1,8 @@
 import React, { useState } from 'react'
+import { Button, FormControl } from 'react-bootstrap';
+import s from './TodoList.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave, faTrash, faEdit, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
 
 export default function TodoList({ todo, setTodo }) {
 
@@ -40,23 +44,27 @@ export default function TodoList({ todo, setTodo }) {
         <div>
             {
                 todo.map(item => (
-                    <div key={item.id}>
+                    <div key={item.id} className={s.listItems}>
                         {
                             edit == item.id ?
                                 <div>
-                                    <input onChange={(e) => setValue(e.target.value)} value={value} />
+                                    <FormControl onChange={(e) => setValue(e.target.value)} value={value} />
                                 </div> :
-                                <div>{item.title}</div>
+                                <div className={!item.status ? s.close : ''}>{item.title}</div>
                         }
                         {
                             edit == item.id ?
                                 <div>
-                                    <button onClick={() => saveTodo(item.id)}>save</button>
+                                    <Button onClick={() => saveTodo(item.id)} size='sm'><FontAwesomeIcon icon={faSave} /></Button>
                                 </div> :
                                 <div>
-                                    <button onClick={() => deleteTodo(item.id)}>delete</button>
-                                    <button onClick={() => editTodo(item.id, item.title)}>edit</button>
-                                    <button onClick={() => statusTodo(item.id)}>close</button>
+                                    <Button onClick={() => deleteTodo(item.id)} size='sm'><FontAwesomeIcon icon={faTrash} /></Button>
+                                    <Button className={s.btn} onClick={() => editTodo(item.id, item.title)} size='sm'><FontAwesomeIcon icon={faEdit} /></Button>
+                                    <Button className={s.btn} onClick={() => statusTodo(item.id)} size='sm'>
+                                        {
+                                            item.status ? <FontAwesomeIcon icon={faLock} /> : <FontAwesomeIcon icon={faLockOpen} />
+                                        }
+                                    </Button>
                                 </div>
                         }
                     </div>

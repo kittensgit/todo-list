@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import { Row, Col, Button, FormControl } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
-
+import s from './AddTodo.module.css'
 export default function AddTodo({ todo, setTodo }) {
 
     const [value, setValue] = useState('')
@@ -17,9 +18,11 @@ export default function AddTodo({ todo, setTodo }) {
     }
 
     return (
-        <div>
-            <input placeholder='enter task' value={value} onChange={(e) => setValue(e.target.value)} />
-            <button onClick={saveTodo}>save</button>
-        </div>
+        <Row>
+            <Col className={s.addTodoForm}>
+                <FormControl placeholder='enter task' value={value} onChange={(e) => setValue(e.target.value)} />
+                <Button className={s.btn} onClick={saveTodo}>save</Button>
+            </Col>
+        </Row>
     )
 }
