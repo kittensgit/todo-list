@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import uuid from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
 
 export default function AddTodo({ todo, setTodo }) {
 
@@ -8,11 +8,12 @@ export default function AddTodo({ todo, setTodo }) {
     function saveTodo() {
         setTodo(
             [...todo, {
-                id: uuid.v4,
+                id: uuidv4,
                 title: value,
                 status: true
             }]
         )
+        setValue('')
     }
 
     return (
