@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Button, FormControl } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react'
+import { Button, ButtonGroup, Col, Row } from 'react-bootstrap';
 import s from './TodoList.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faTrash, faEdit, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
@@ -8,6 +8,11 @@ export default function TodoList({ todo, setTodo }) {
 
     const [edit, setEdit] = useState(null)
     const [value, setValue] = useState('')
+    const [filtered, setFiltered] = useState(todo)
+
+    useEffect(() => {
+        setFiltered(todo)
+    }, [todo])
 
     function deleteTodo(id) {
         let newTodo = [...todo].filter(item => item.id !== id)
@@ -40,15 +45,33 @@ export default function TodoList({ todo, setTodo }) {
         setEdit(null)
     }
 
+    function todoFilter(status) {
+        if (status == 'all') {
+            setFiltered(todo)
+        } else {
+            let newTodo = [...todo].filter(item => item.status === status)
+            setFiltered(newTodo)
+        }
+    }
+
     return (
         <div>
+            <Row>
+                <Col className={s.filter}>
+                    <ButtonGroup aria-label="Basic example" className={s.btns}>
+                        <Button variant="secondary" onClick={() => todoFilter('all')}>all</Button>
+                        <Button variant="secondary" onClick={() => todoFilter(true)}>done</Button>
+                        <Button variant="secondary" onClick={() => todoFilter(false)}>not done</Button>
+                    </ButtonGroup>
+                </Col>
+            </Row>
             {
-                todo.map(item => (
+                filtered.map(item => (
                     <div key={item.id} className={s.listItems}>
                         {
                             edit == item.id ?
                                 <div>
-                                    <FormControl onChange={(e) => setValue(e.target.value)} value={value} />
+                                    <input onChange={(e) => setValue(e.target.value)} value={value} />
                                 </div> :
                                 <div className={!item.status ? s.close : ''}>{item.title}</div>
                         }
